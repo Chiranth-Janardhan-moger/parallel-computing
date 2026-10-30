@@ -1,0 +1,93 @@
+{
+  "courseCode": "BCSL706",
+  "courseTitle": "Parallel Computing Laboratory",
+  "institution": "BMS Institute of Technology & Management",
+  "department": "Department of Computer Science and Engineering",
+  "affiliation": "Autonomous Institute under VTU",
+  "semester": "B.E. Computer Science and Engineering - Semester VII",
+  "scheme": "CBCS 2022 Scheme (Effective from Academic Year 2025-26)",
+  "credits": {
+    "hours": "0:0:1:0",
+    "credits": 1,
+    "cie": 50,
+    "see": 50,
+    "examHours": 3
+  },
+  "objectives": [
+    "Design and implement high-performance versions of standard single-threaded algorithms.",
+    "Demonstrate the architectural features of GPU and MIC hardware accelerators.",
+    "Design programs to extract maximum performance in a multicore, shared-memory execution environment.",
+    "Develop programs using OpenMP, MPI and CUDA."
+  ],
+  "outcomes": [
+    {
+      "code": "CO1",
+      "desc": "Apply OpenMP parallel programming constructs to develop efficient shared-memory applications."
+    },
+    {
+      "code": "CO2",
+      "desc": "Demonstrate the use of MPI to develop message-passing parallel programs for distributed-memory architectures."
+    },
+    {
+      "code": "CO3",
+      "desc": "Design and implement GPU solutions for compute-intensive problems using CUDA."
+    }
+  ],
+  "setupGuide": [
+    {
+      "step": 1,
+      "title": "Install the GCC compiler and OpenMP support",
+      "desc": "OpenMP support is bundled with GCC on Ubuntu; only build-essential needs to be installed:",
+      "commands": [
+        "sudo apt update",
+        "sudo apt install build-essential"
+      ]
+    },
+    {
+      "step": 2,
+      "title": "Install an MPI implementation",
+      "desc": "Either MPICH or OpenMPI can be used. OpenMPI is used for the commands in this manual:",
+      "commands": [
+        "sudo apt install openmpi-bin libopenmpi-dev",
+        "# Alternatively: sudo apt install mpich"
+      ]
+    },
+    {
+      "step": 3,
+      "title": "Verify the installation",
+      "desc": "Check compiler and runtime versions:",
+      "commands": [
+        "gcc --version",
+        "mpicc --version",
+        "mpirun --version"
+      ]
+    },
+    {
+      "step": 4,
+      "title": "Create working directory",
+      "desc": "Create one folder for the lab and save every program's .c file there:",
+      "commands": [
+        "mkdir ~/BCSL706_ParallelComputingLab",
+        "cd ~/BCSL706_ParallelComputingLab",
+        "nano prog1_matvec.c   # write or paste the code, then save (Ctrl+O, Enter, Ctrl+X)"
+      ]
+    },
+    {
+      "step": 5,
+      "title": "General compilation and execution pattern",
+      "desc": "Standard patterns for OpenMP and MPI executions:",
+      "commands": [
+        "# OpenMP programs (compiled with the -fopenmp flag):",
+        "gcc -fopenmp <filename>.c -o <output_name>",
+        "./<output_name>",
+        "",
+        "# MPI programs (compiled with mpicc, executed with mpirun -np <num>):",
+        "mpicc <filename>.c -o <output_name>",
+        "mpirun -np 4 ./<output_name>",
+        "",
+        "# If mpirun refuses to launch more processes than CPU cores, use --oversubscribe:",
+        "mpirun --oversubscribe -np 4 ./prog7_mangoes"
+      ]
+    }
+  ]
+}
