@@ -1,24 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import experimentsData from '../data/experiments.json';
 import Toast from './Toast';
 
 export default function CardDetail() {
   const { id } = useParams();
-  const [experiment, setExperiment] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
 
-  useEffect(() => {
-    const found = experimentsData.find((item) => String(item.id) === String(id));
-    setExperiment(found || null);
-  }, [id]);
+  // Synchronous lookup: handles "4", "04", number 4, or filename like "prog4"
+  const rawId = id ? String(id).trim() : '';
+  const cleanNum = rawId.replace(/^0+/, '') || '0';
+  const experiment = experimentsData.find(
+    (item) =>
+      String(item.id) === rawId ||
+      String(item.id) === cleanNum ||
+      Number(item.number) === Number(rawId) ||
+      item.file.toLowerCase().includes(rawId.toLowerCase())
+  );
 
   if (!experiment) {
     return (
-      <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
-        <h2>Exercise Not Found</h2>
-        <Link to="/" className="glass-btn" style={{ marginTop: '20px' }}>Back to Home</Link>
+      <div className="glass-panel" style={{ padding: '40px', textAlign: 'center', maxWidth: '600px', margin: '40px auto' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: '600', marginBottom: '8px' }}>Exercise Not Found</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '20px' }}>
+          No exercise matches identifier "{id}". Valid numbers are 1 to 9.
+        </p>
+        <Link to="/" className="glass-btn glass-btn-primary">Return to Laboratory</Link>
       </div>
     );
   }
@@ -82,9 +90,8 @@ export default function CardDetail() {
         padding: '20px', 
         background: 'rgba(59, 130, 246, 0.04)', 
         borderRadius: '14px', 
-        borderLeft: '4px solid var(--accent-primary)',
         border: '1px solid rgba(59, 130, 246, 0.1)',
-        borderLeftWidth: '4px'
+        borderLeft: '4px solid var(--accent-primary)'
       }}>
         <h4 style={{ fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'var(--accent-primary)' }}>
           Problem Statement

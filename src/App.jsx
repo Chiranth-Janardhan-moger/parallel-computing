@@ -30,6 +30,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<MainLayout />} />
           <Route path="/card/:id" element={<CardDetail />} />
+          <Route path="/card/:id/*" element={<CardDetail />} />
+          <Route path="/:id" element={<CardDetail />} />
           <Route path="*" element={
             <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
               <h2>404 - Workspace Not Found</h2>
