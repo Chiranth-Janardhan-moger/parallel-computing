@@ -88,7 +88,7 @@ ${exp.code}`;
             </button>
 
             <a 
-              href="https://inslab26.vercel.app/" 
+              href="https://inslab.vercel.app/" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="glass-btn glass-btn-primary" 
