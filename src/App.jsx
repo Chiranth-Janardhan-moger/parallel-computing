@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import LabBoard from './components/LabBoard';
 import CardDetail from './components/CardDetail';
@@ -22,6 +22,21 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const historyRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (historyRef.current && !historyRef.current.contains(event.target)) {
+        setHistoryOpen(false);
+      }
+    };
+    if (historyOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [historyOpen]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -103,17 +118,14 @@ ${exp.code}`;
             </a>
 
             {/* History Dropdown */}
-            <div 
-              className="history-menu-container"
-              onMouseEnter={() => setHistoryOpen(true)}
-              onMouseLeave={() => setHistoryOpen(false)}
-            >
+            <div className="history-menu-container" ref={historyRef}>
               <button 
                 type="button"
                 className={`glass-btn history-trigger-btn ${historyOpen ? 'active' : ''}`}
-                onClick={() => setHistoryOpen(!historyOpen)}
-                title="Previous Course Labs (ML & Docker)"
-                aria-label="Previous Course Labs"
+                onClick={() => setHistoryOpen((prev) => !prev)}
+                title="Course Labs History (ML & Docker)"
+                aria-label="Course Labs History"
+                aria-expanded={historyOpen}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -133,6 +145,7 @@ ${exp.code}`;
                     rel="noopener noreferrer" 
                     className="history-dropdown-item"
                     title="Machine Learning Lab"
+                    onClick={() => setHistoryOpen(false)}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span className="history-bullet" />
@@ -150,6 +163,7 @@ ${exp.code}`;
                     rel="noopener noreferrer" 
                     className="history-dropdown-item"
                     title="DevOps / Docker Lab"
+                    onClick={() => setHistoryOpen(false)}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span className="history-bullet" />
