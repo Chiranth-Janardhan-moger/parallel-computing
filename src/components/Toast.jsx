@@ -34,12 +34,6 @@ export default function Toast({ message, visible, onClose }) {
       gap: '8px'
     }}>
       <span>{message}</span>
-      <style>{`
-        @keyframes slideUpFade {
-          from { transform: translate(-50%, 20px); opacity: 0; }
-          to { transform: translate(-50%, 0); opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }

@@ -7,15 +7,7 @@ import experimentsData from './data/experiments.json';
 import './App.css';
 
 function MainLayout() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <h2 style={{ fontSize: '24px', fontWeight: '500', marginBottom: '10px', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--accent-primary)', display: 'inline-block' }}></span>
-        Parallel Computing Laboratory Exercises
-      </h2>
-      <LabBoard />
-    </div>
-  );
+  return <LabBoard />;
 }
 
 export default function App() {
@@ -79,14 +71,14 @@ ${exp.code}`;
       <main className="container-box fade-in" style={{ flexGrow: '1' }}>
         {/* Top Header Navigation Bar */}
         <header className="portal-header">
-          <Link to="/" className="portal-brand" title="PC Lab Portal Home">
+          <Link to="/" className="portal-brand" title="Parallel Computing Laboratory Exercises Home">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--accent-primary)' }}>
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
               <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
               <line x1="6" y1="6" x2="6.01" y2="6"></line>
               <line x1="6" y1="18" x2="6.01" y2="18"></line>
             </svg>
-            <span>PC Lab</span>
+            <span>Parallel Computing Laboratory Exercises</span>
           </Link>
 
           <div className="portal-header-actions">
@@ -102,28 +94,13 @@ ${exp.code}`;
               Copy All Programs
             </button>
 
-            <a 
-              href="https://inslab.vercel.app/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="glass-btn glass-btn-primary" 
-              title="Open Information and Network Security Lab Portal"
-            >
-              <span>INS Lab</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-            </a>
-
             {/* History Dropdown */}
             <div className="history-menu-container" ref={historyRef}>
               <button 
                 type="button"
                 className={`glass-btn history-trigger-btn ${historyOpen ? 'active' : ''}`}
                 onClick={() => setHistoryOpen((prev) => !prev)}
-                title="Course Labs History (ML & Docker)"
+                title="Course Labs History (INS, ML & Docker)"
                 aria-label="Course Labs History"
                 aria-expanded={historyOpen}
               >
@@ -139,6 +116,24 @@ ${exp.code}`;
                   <div className="history-dropdown-header">
                     Course Labs
                   </div>
+                  <a 
+                    href="https://inslab.vercel.app/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="history-dropdown-item"
+                    title="Information and Network Security Lab"
+                    onClick={() => setHistoryOpen(false)}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="history-bullet" />
+                      <span>INS</span>
+                    </div>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+
                   <a 
                     href="https://ml26.vercel.app/" 
                     target="_blank" 
