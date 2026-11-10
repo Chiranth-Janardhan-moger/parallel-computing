@@ -21,6 +21,17 @@
   ],
   "rewrites": [
     {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(curl|cURL|wget|Wget|HTTPie|httpie).*"
+        }
+      ],
+      "destination": "/api/raw"
+    },
+    {
       "source": "/",
       "has": [
         {
@@ -29,6 +40,10 @@
           "value": ".*(curl|cURL|wget|Wget|HTTPie|httpie).*"
         }
       ],
+      "destination": "/api/raw"
+    },
+    {
+      "source": "/all",
       "destination": "/api/raw"
     },
     {

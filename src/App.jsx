@@ -3,7 +3,6 @@ import { Routes, Route, Link } from 'react-router-dom';
 import LabBoard from './components/LabBoard';
 import Toast from './components/Toast';
 import experimentsData from './data/experiments.json';
-import './App.css';
 
 const CardDetail = lazy(() => import('./components/CardDetail'));
 
