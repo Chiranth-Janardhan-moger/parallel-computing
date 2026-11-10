@@ -18,19 +18,704 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" />
     </noscript>
 
-    <!-- Critical CSS for Instant 0ms First Contentful Paint -->
+    <!-- Inlined Critical CSS for 0ms Render-blocking Time -->
     <style>
-      body {
-        margin: 0;
-        background: radial-gradient(circle at 50% 50%, #f0f7ff 0%, #dbeafe 100%);
-        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        color: #0f172a;
-        min-height: 100vh;
-      }
+/* Custom CSS variables for Premium Blue Theme */
+:root {
+  --glass-blur-val: 12px;
+  --glass-border-alpha-val: 0.15;
+  --glass-bg-alpha-val: 0.6;
+  
+  --glass-blur: blur(var(--glass-blur-val));
+  --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
+
+  /* Default Theme: Premium Light Blue Background */
+  --bg-gradient: radial-gradient(circle at 50% 50%, #f0f7ff 0%, #dbeafe 100%);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --glass-bg: rgba(255, 255, 255, var(--glass-bg-alpha-val));
+  --glass-border: rgba(59, 130, 246, var(--glass-border-alpha-val));
+  --glass-border-reflect: rgba(15, 23, 42, calc(var(--glass-border-alpha-val) * 1.5));
+  --glass-shadow: 0 16px 40px -10px rgba(59, 130, 246, 0.08);
+  --neon-shadow: 0 0 20px rgba(59, 130, 246, 0.05);
+  
+  /* Aurora Accent Orbs (Light Mode) */
+  --orb-indigo: rgba(59, 130, 246, 0.08);
+  --orb-purple: rgba(147, 197, 253, 0.06);
+  --orb-crimson: rgba(96, 165, 250, 0.05);
+
+  /* Specific light mode accents */
+  --accent-primary: #2563eb;
+  --accent-secondary: #3b82f6;
+  --accent-crimson: #ef4444;
+  --border-focus: rgba(37, 99, 235, 0.4);
+  
+  --code-bg: rgba(239, 246, 255, 0.85);
+  --code-text: #1e3a8a;
+}
+
+
+
+/* Accessibility settings check */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-blur-val: 0px !important;
+    --glass-bg-alpha-val: 0.98 !important;
+    --glass-border-alpha-val: 0.25 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb {
+    animation: none !important;
+  }
+  * {
+    transition: none !important;
+  }
+}
+
+/* Base resets & layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  letter-spacing: -0.1px;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Aurora Backdrop Orbs - Hardware-accelerated radial gradients (zero blur filter penalty) */
+.orb-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  transform: translateZ(0);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.orb-1 {
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.16) 0%, rgba(59, 130, 246, 0.05) 45%, transparent 70%);
+  top: -10%;
+  left: -5%;
+  animation: floatOrb1 25s infinite ease-in-out;
+}
+
+.orb-2 {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.18) 0%, rgba(147, 197, 253, 0.06) 45%, transparent 70%);
+  bottom: -10%;
+  right: -5%;
+  animation: floatOrb2 30s infinite ease-in-out;
+}
+
+.orb-3 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.14) 0%, rgba(96, 165, 250, 0.04) 45%, transparent 70%);
+  top: 35%;
+  left: 40%;
+  animation: floatOrb3 22s infinite ease-in-out;
+}
+
+/* Floating Orb Animations - Pure 3D transform compositor execution */
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(80px, 60px, 0) scale(1.06); }
+}
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.06); }
+  50% { transform: translate3d(-100px, -70px, 0) scale(0.94); }
+}
+@keyframes floatOrb3 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.96); }
+  50% { transform: translate3d(-40px, 90px, 0) scale(1.04); }
+}
+
+/* Glassmorphism utility components */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.4) 100%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--neon-shadow);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--glass-border-reflect) 0%, transparent 100%);
+  opacity: 0.3;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: 0 16px 36px -10px rgba(37, 99, 235, 0.16), 0 0 20px rgba(37, 99, 235, 0.06);
+}
+
+.glass-card:hover::before {
+  opacity: 0.6;
+}
+
+/* Glass Inputs */
+.glass-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.glass-input {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  border-color: var(--accent-primary);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+/* Glass Buttons */
+.glass-btn {
+  padding: 12px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--glass-shadow);
+  user-select: none;
+}
+
+.glass-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow), 0 4px 12px rgba(59, 130, 246, 0.12);
+}
+
+.glass-btn:active {
+  transform: translateY(1px);
+}
+
+.glass-btn-primary {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(29, 78, 216, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.45);
+  color: #1e3a8a;
+}
+
+.glass-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.45) 0%, rgba(29, 78, 216, 0.3) 100%);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Portal Top Header Bar */
+.portal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--glass-border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+  transition: opacity 0.2s ease;
+}
+
+.portal-brand:hover {
+  opacity: 0.85;
+}
+
+.portal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* History Dropdown Menu */
+.history-menu-container {
+  position: relative;
+}
+
+.history-trigger-btn {
+  padding: 11px 14px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-trigger-btn:hover,
+.history-trigger-btn.active {
+  border-color: var(--accent-primary);
+  background: rgba(37, 99, 235, 0.14);
+  color: var(--accent-primary);
+}
+
+.history-dropdown-card {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 175px;
+  background: rgba(240, 247, 255, 0.98);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.16), 0 0 20px rgba(37, 99, 235, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-dropdown-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent-primary);
+  padding: 6px 10px 4px 10px;
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 4px;
+}
+
+.history-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.history-dropdown-item:hover {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--accent-primary);
+  transform: translateX(2px);
+}
+
+.history-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  display: inline-block;
+}
+
+@media (max-width: 640px) {
+  .portal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .portal-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* Custom layout modules utilities */
+.container-box {
+  width: 100%;
+  max-width: 100%;
+  padding: 40px 60px;
+  @media (max-width: 768px) {
+    padding: 30px 20px;
+  }
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slideUpFade {
+  from { transform: translate3d(-50%, 16px, 0); opacity: 0; }
+  to { transform: translate3d(-50%, 0, 0); opacity: 1; }
+}
+
+/* Responsive adjustments for Card Detail view */
+.detail-header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 20px;
+}
+
+.detail-copy-actions {
+  display: flex;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .detail-header-controls {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .detail-copy-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 8px;
+  }
+  
+  .detail-copy-actions .glass-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Card internal elements for premium minimal layout */
+.card-index {
+  font-size: 56px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.15;
+  line-height: 1;
+  font-family: var(--font-sans);
+  will-change: transform, opacity;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover .card-index {
+  opacity: 0.35;
+  transform: translateY(-2px);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 20px;
+  line-height: 1.4;
+  transition: color 0.2s ease;
+  letter-spacing: -0.2px;
+}
+
+.glass-card:hover .card-title {
+  color: var(--accent-primary);
+}
+
+
+/* Technology Badges */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-openmp {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.badge-mpi {
+  background: rgba(13, 148, 136, 0.1);
+  color: #0f766e;
+  border: 1px solid rgba(13, 148, 136, 0.25);
+}
+
+.badge-file {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.05);
+  color: #334155;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+/* Simulated Linux Terminal block */
+.terminal-window {
+  background: #0f172a;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 12px 30px -8px rgba(15, 23, 42, 0.35);
+}
+
+.terminal-header {
+  background: #1e293b;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #22c55e; }
+
+.terminal-title {
+  color: #94a3b8;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  margin-left: 8px;
+  letter-spacing: 0.3px;
+}
+
+.terminal-body {
+  padding: 16px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  color: #e2e8f0;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Category Filter Tabs */
+.filter-tabs-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.filter-tab {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filter-tab:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.filter-tab.active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(59, 130, 246, 0.22) 100%);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+}
+
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="app-container" style="padding: 20px 0;">
+        <div class="orb-container">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+        </div>
+        <main class="container-box fade-in" style="flex-grow: 1;">
+          <header class="portal-header">
+            <a href="/" class="portal-brand" title="Parallel Computing Laboratory Exercises Home">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-primary);">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+              </svg>
+              <span>Parallel Computing Laboratory Exercises</span>
+            </a>
+            <div class="portal-header-actions">
+              <button class="glass-btn" title="Copy all 9 lab programs completely to clipboard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy All Programs
+              </button>
+              <div class="history-menu-container">
+                <button type="button" class="glass-btn history-trigger-btn" title="Course Labs History (INS, ML &amp; Docker)" aria-label="Course Labs History">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                    <path d="M12 7v5l4 2"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </header>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 10px;">
+          <a href="/card/1" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">01</div>
+            <h3 class="card-title">Matrix-Vector Multiplication</h3>
+          </a>
+          <a href="/card/2" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">02</div>
+            <h3 class="card-title">Supermarket Bill Processing</h3>
+          </a>
+          <a href="/card/3" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">03</div>
+            <h3 class="card-title">Numerical Integration of Pi</h3>
+          </a>
+          <a href="/card/4" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">04</div>
+            <h3 class="card-title">Fibonacci Series (Producer-Consumer)</h3>
+          </a>
+          <a href="/card/5" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">05</div>
+            <h3 class="card-title">Highest CGPA (Gold Medal)</h3>
+          </a>
+          <a href="/card/6" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">06</div>
+            <h3 class="card-title">Square Matrix Multiplication</h3>
+          </a>
+          <a href="/card/7" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">07</div>
+            <h3 class="card-title">Mangoes Picked by N Robots</h3>
+          </a>
+          <a href="/card/8" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">08</div>
+            <h3 class="card-title">Blocking & Non-Blocking Communication</h3>
+          </a>
+          <a href="/card/9" class="glass-card" style="padding: 36px 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; text-decoration: none;">
+            <div class="card-index">09</div>
+            <h3 class="card-title">MPI Collective Communication</h3>
+          </a>
+          </div>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

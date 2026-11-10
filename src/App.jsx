@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import LabBoard from './components/LabBoard';
-import CardDetail from './components/CardDetail';
 import Toast from './components/Toast';
 import experimentsData from './data/experiments.json';
 import './App.css';
+
+const CardDetail = lazy(() => import('./components/CardDetail'));
 
 function MainLayout() {
   return <LabBoard />;
@@ -175,18 +176,20 @@ ${exp.code}`;
           </div>
         </header>
 
-        <Routes>
-          <Route path="/" element={<MainLayout />} />
-          <Route path="/card/:id" element={<CardDetail />} />
-          <Route path="/card/:id/*" element={<CardDetail />} />
-          <Route path="/:id" element={<CardDetail />} />
-          <Route path="*" element={
-            <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
-              <h2>404 - Workspace Not Found</h2>
-              <Link to="/" className="glass-btn" style={{ marginTop: '20px' }}>Return to home</Link>
-            </div>
-          } />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<MainLayout />} />
+            <Route path="/card/:id" element={<CardDetail />} />
+            <Route path="/card/:id/*" element={<CardDetail />} />
+            <Route path="/:id" element={<CardDetail />} />
+            <Route path="*" element={
+              <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
+                <h2>404 - Workspace Not Found</h2>
+                <Link to="/" className="glass-btn" style={{ marginTop: '20px' }}>Return to home</Link>
+              </div>
+            } />
+          </Routes>
+        </Suspense>
       </main>
 
       <Toast message={toastMessage} visible={toastVisible} onClose={() => setToastVisible(false)} />
